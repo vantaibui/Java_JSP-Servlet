@@ -1,7 +1,6 @@
 package com.jsp_servlet.dao.implement;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,24 +10,8 @@ import java.util.List;
 import com.jsp_servlet.dao.INewDAO;
 import com.jsp_servlet.model.NewModel;
 
-public class NewDAO implements INewDAO {
-	public Connection getConnection() {
-		String hostName = "jdbc:mysql://localhost:3306/";
-		String database = "project-jsp_servlet";
-		String userName = "root";
-		String password = "root";
-		String connectionURL = hostName + database;
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-
-			return DriverManager.getConnection(connectionURL, userName, password);
-		} catch (ClassNotFoundException | SQLException e) { // multiple catch
-			e.printStackTrace();
-
-			return null;
-		}
-	}
-
+public class NewDAO extends AbstractDAO<NewModel> implements INewDAO {
+	
 	@Override
 	public List<NewModel> findByCategoryId(Long categoryId) {
 
@@ -80,4 +63,5 @@ public class NewDAO implements INewDAO {
 		return null;
 
 	}
+
 }

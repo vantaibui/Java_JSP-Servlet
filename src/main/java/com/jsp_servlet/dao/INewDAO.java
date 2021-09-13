@@ -4,6 +4,6 @@ import java.util.List;
 
 import com.jsp_servlet.model.NewModel;
 
-public interface INewDAO extends GenericDAO {
+public interface INewDAO extends GenericDAO<NewModel> {
 	List<NewModel> findByCategoryId(Long categoryId);
 }
