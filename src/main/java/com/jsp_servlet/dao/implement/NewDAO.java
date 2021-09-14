@@ -1,67 +1,85 @@
 package com.jsp_servlet.dao.implement;
 
+import static java.sql.Statement.RETURN_GENERATED_KEYS;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.jsp_servlet.dao.INewDAO;
+import com.jsp_servlet.mapper.implement.NewMapper;
 import com.jsp_servlet.model.NewModel;
 
 public class NewDAO extends AbstractDAO<NewModel> implements INewDAO {
-	
+
 	@Override
 	public List<NewModel> findByCategoryId(Long categoryId) {
+		// init parameter
+		String sql = "SELECT * FROM news WHERE categoryid = ?";
 
-		List<NewModel> results = new ArrayList<NewModel>();
+		return query(sql, new NewMapper(), categoryId);
 
-		Connection connection = getConnection();
+	}
+
+	@Override
+	public Long save(NewModel model) {
+		String sql = "INSERT INTO news (title, content, categoryid) VALUES (?, ?, ?)";
+
+		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
 
-		// init parameter
-		String sql = "select * from news where categoryid = ?";
-		if (connection != null) {
-			try {
-				preparedStatement = connection.prepareStatement(sql);
-				preparedStatement.setLong(1, categoryId);
-				resultSet = preparedStatement.executeQuery();
+		Long id = null;
+		try {
+			connection = getConnection();
+			connection.setAutoCommit(false);
+			preparedStatement = connection.prepareStatement(sql, RETURN_GENERATED_KEYS);
+			preparedStatement.setString(1, model.getTitle());
+			preparedStatement.setString(2, model.getContent());
+			preparedStatement.setLong(3, model.getCategoryId());
 
-				while (resultSet.next()) {
-					NewModel newModel = new NewModel();
-
-					newModel.setId(resultSet.getLong("id"));
-					newModel.setTitle(resultSet.getString("title"));
-					newModel.setCategoryId(resultSet.getLong("categoryid"));
-
-					results.add(newModel);
-
-				}
-				System.out.println(results);
-				return results;
-			} catch (SQLException e) {
-				e.printStackTrace();
-			} finally {
+			preparedStatement.executeUpdate();
+			resultSet = preparedStatement.getGeneratedKeys();
+			if (resultSet.next()) {
+				id = resultSet.getLong(1);
+			}
+			connection.commit();
+			return id;
+		} catch (SQLException e) {
+			if (connection != null) {
 				try {
-					if (connection != null) {
-						connection.close();
-					}
-					if (preparedStatement != null) {
-						preparedStatement.close();
-					}
-					if (resultSet != null) {
-						resultSet.close();
-					}
-				} catch (SQLException e) {
-					e.printStackTrace();
+					connection.rollback();
+				} catch (SQLException e1) {
+					e1.printStackTrace();
 				}
 			}
+			return null;
+		} finally {
+			try {
+				if (connection != null) {
+					connection.close();
+				}
+				if (preparedStatement != null) {
+					preparedStatement.close();
+				}
+				if (resultSet != null) {
+					resultSet.close();
+				}
 
+			} catch (SQLException e) {
+				e.printStackTrace();
+
+				return null;
+			}
 		}
-		return null;
+	}
 
+	@Override
+	public NewModel saveNew(NewModel newModel) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
