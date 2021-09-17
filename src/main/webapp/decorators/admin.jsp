@@ -4,108 +4,59 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title><decorator:title default="Trang quản trị">Trang quản trị</decorator:title></title>
-
-<!-- Custom fonts for this template-->
-<link
-	href="<c:url value='/template/admin/vendor/fontawesome-free/css/all.min.css'/>"
-	rel="stylesheet" type="text/css">
-<link
-	href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-	rel="stylesheet">
-
-<!-- Custom styles for this template-->
-<link href="<c:url value='/template/admin/css/sb-admin-2.min.css'/>"
-	rel="stylesheet">
+	<title><decorator:title default="Trang chủ" /></title>
+	<link rel="stylesheet" href="<c:url value='/template/admin/assets/css/bootstrap.min.css' />" />
+    <link rel="stylesheet" href="<c:url value='/template/admin/font-awesome/4.5.0/css/font-awesome.min.css' />" />
+    <link rel="stylesheet" href="<c:url value='/template/admin/assets/css/ace.min.css' />" class="ace-main-stylesheet" id="main-ace-style" />
+    <script src="<c:url value='/template/admin/assets/js/ace-extra.min.js' />"></script>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type='text/javascript' src='<c:url value="/template/admin/js/jquery-2.2.3.min.js" />'></script>
+    <script src="<c:url value='/template/admin/assets/js/jquery.2.1.1.min.js' />"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="<c:url value='/template/paging/jquery.twbsPagination.js' />"></script>
+    
 </head>
-<body id="page-top">
-
-	<!-- Page Wrapper -->
-	<div id="wrapper">
-
-		<!-- Sidebar -->
-		<%@ include file="/common/admin/sidebar.jsp"%>
-		<!-- End of Sidebar -->
-
-		<!-- Content Wrapper -->
-		<div id="content-wrapper" class="d-flex flex-column">
-
-			<!-- Main Content -->
-			<div id="content">
-
-				<!-- Topbar -->
-				<%@ include file="/common/admin/header.jsp"%>
-				<!-- End of Topbar -->
-
-				<!-- Begin Page Content -->
-				<decorator:body></decorator:body>
-				<!-- /.container-fluid -->
-
-			</div>
-			<!-- End of Main Content -->
-
-			<!-- Footer -->
-			<%@include file="/common/admin/footer.jsp"%>
-			<!-- End of Footer -->
-
-		</div>
-		<!-- End of Content Wrapper -->
-
+<body class="no-skin">
+	<!-- header -->
+    <%@ include file="/common/admin/header.jsp" %>
+    <!-- header -->
+	
+	<div class="main-container" id="main-container">
+		<script type="text/javascript">
+				try{ace.settings.check('main-container' , 'fixed')}catch(e){}
+		</script>
+		<!-- header -->
+    	<%@ include file="/common/admin/menu.jsp" %>
+    	<!-- header -->
+		
+		<decorator:body/>
+		
+		<!-- footer -->
+    	<%@ include file="/common/admin/footer.jsp" %>
+    	<!-- footer -->
+    	
+    	<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse display">
+				<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+		</a>
 	</div>
-	<!-- End of Page Wrapper -->
-
-	<!-- Scroll to Top Button-->
-	<a class="scroll-to-top rounded" href="#page-top"> <i
-		class="fas fa-angle-up"></i>
-	</a>
-
-	<!-- Logout Modal-->
-	<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog"
-		aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-					<button class="close" type="button" data-dismiss="modal"
-						aria-label="Close">
-						<span aria-hidden="true">×</span>
-					</button>
-				</div>
-				<div class="modal-body">Select "Logout" below if you are ready
-					to end your current session.</div>
-				<div class="modal-footer">
-					<button class="btn btn-secondary" type="button"
-						data-dismiss="modal">Cancel</button>
-					<a class="btn btn-primary" href="login.html">Logout</a>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<!-- Bootstrap core JavaScript-->
-	<script type="text/javascript"
-		src="<c:url value='/template/admin/vendor/jquery/jquery.min.js'/>"></script>
-	<script type="text/javascript"
-		src="<c:url value='/template/admin/vendor/bootstrap/js/bootstrap.bundle.min.js'/>"></script>
-
-	<!-- Core plugin JavaScript-->
-	<script type="text/javascript"
-		src="<c:url value='/template/admin/vendor/jquery-easing/jquery.easing.min.js'/>"></script>
-
-	<!-- Custom scripts for all pages-->
-	<script type="text/javascript"
-		src="<c:url value='/template/admin/js/sb-admin-2.min.js'/>"></script>
-
-	<!-- Page level plugins -->
-	<script type="text/javascript"
-		src="<c:url value='/template/admin/vendor/chart.js/Chart.min.js'/>"></script>
-
-	<!-- Page level custom scripts -->
-	<script type="text/javascript"
-		src="<c:url value='/template/admin/js/demo/chart-area-demo.js'/>"></script>
-	<script type="text/javascript"
-		src="<c:url value='/template/admin/js/demo/chart-pie-demo.js'/>"></script>
-
+	
+	
+	<script src="<c:url value='/template/admin/assets/js/bootstrap.min.js' />"></script>
+	<script src="<c:url value='/template/admin/assets/js/jquery-ui.custom.min.js' />"></script>
+	<script src="<c:url value='/template/admin/assets/js/jquery.ui.touch-punch.min.js' />"></script>
+	<script src="<c:url value='/template/admin/assets/js/jquery.easypiechart.min.js' />"></script>
+	<script src="<c:url value='/template/admin/assets/js/jquery.sparkline.min.js' />"></script>
+	<script src="<c:url value='/template/admin/assets/js/jquery.flot.min.js' />"></script>
+	<script src="<c:url value='/template/admin/assets/js/jquery.flot.pie.min.js' />"></script>
+	<script src="<c:url value='/template/admin/assets/js/jquery.flot.resize.min.js' />"></script>
+	<script src="<c:url value='/template/admin/assets/js/ace-elements.min.js' />"></script>
+	<script src="<c:url value='/template/admin/assets/js/ace.min.js' />"></script>
+	<script src="<c:url value='/template/admin/assets/js/bootstrap.min.js'/>"></script>
+	
+	<!-- page specific plugin scripts -->
+	<script src="<c:url value='/template/admin/assets/js/jquery-ui.min.js'/>"></script>
 </body>
 </html>

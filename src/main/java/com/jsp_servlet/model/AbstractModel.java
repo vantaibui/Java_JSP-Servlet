@@ -1,13 +1,22 @@
 package com.jsp_servlet.model;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
-public class AbstractModel {
+public class AbstractModel<T> {
 	private Long id;
 	private Timestamp createDate;
 	private Timestamp modifiedDate;
 	private String createBy;
 	private String modifiedBy;
+
+	private Long[] ids;
+	private List<T> listResult = new ArrayList<T>();
+	private Integer page;
+	private Integer totalPage;
+	private Integer totalItem; // totalPage = totalItem / maxPageItem
+	private Integer maxPageItem; // tổng số item tối đa trên 1 page
 
 	public Long getId() {
 		return id;
@@ -48,4 +57,53 @@ public class AbstractModel {
 	public void setModifiedBy(String modifiedBy) {
 		this.modifiedBy = modifiedBy;
 	}
+
+	public Long[] getIds() {
+		return ids;
+	}
+
+	public void setIds(Long[] ids) {
+		this.ids = ids;
+	}
+
+	public List<T> getListResult() {
+		return listResult;
+	}
+
+	public void setListResult(List<T> listResult) {
+		this.listResult = listResult;
+	}
+
+	public Integer getPage() {
+		return page;
+	}
+
+	public void setPage(Integer page) {
+		this.page = page;
+	}
+
+	public Integer getTotalPage() {
+		return totalPage;
+	}
+
+	public void setTotalPage(Integer totalPage) {
+		this.totalPage = totalPage;
+	}
+
+	public Integer getTotalItem() {
+		return totalItem;
+	}
+
+	public void setTotalItem(Integer totalItem) {
+		this.totalItem = totalItem;
+	}
+
+	public Integer getMaxPageItem() {
+		return maxPageItem;
+	}
+
+	public void setMaxPageItem(Integer maxPageItem) {
+		this.maxPageItem = maxPageItem;
+	}
+
 }

@@ -1,6 +1,6 @@
 package com.jsp_servlet.model;
 
-public class CategoryModel extends AbstractModel {
+public class CategoryModel extends AbstractModel<CategoryModel> {
 	private String name;
 	private String code;
 

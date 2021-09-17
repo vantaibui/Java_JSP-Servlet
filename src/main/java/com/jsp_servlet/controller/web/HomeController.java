@@ -30,11 +30,18 @@ public class HomeController extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		Long cateogryId = 1L;
 
-		req.setAttribute("categories", categoryService.findAll());
+//		req.setAttribute("categories", categoryService.findAll());
 
-		req.setAttribute("news", newService.findByCategoryId(cateogryId));
+//		Long cateogryId = 1L;
+//		String title = "Paul Pogba đồng ý gia hạn hợp đồng với MU";
+//		String content = "Paul Pogba";
+//		NewModel newModel = new NewModel();
+//		newModel.setTitle(title);
+//		newModel.setContent(content);
+//		newModel.setCategoryId(cateogryId);
+//		
+//		newService.save(newModel);
 
 		RequestDispatcher requestDispatcher = req.getRequestDispatcher("/views/web/home.jsp");
 

@@ -1,11 +1,5 @@
 package com.jsp_servlet.dao.implement;
 
-import static java.sql.Statement.RETURN_GENERATED_KEYS;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 
 import com.jsp_servlet.dao.INewDAO;
@@ -27,59 +21,51 @@ public class NewDAO extends AbstractDAO<NewModel> implements INewDAO {
 	public Long save(NewModel model) {
 		String sql = "INSERT INTO news (title, content, categoryid) VALUES (?, ?, ?)";
 
-		Connection connection = null;
-		PreparedStatement preparedStatement = null;
-		ResultSet resultSet = null;
-
-		Long id = null;
-		try {
-			connection = getConnection();
-			connection.setAutoCommit(false);
-			preparedStatement = connection.prepareStatement(sql, RETURN_GENERATED_KEYS);
-			preparedStatement.setString(1, model.getTitle());
-			preparedStatement.setString(2, model.getContent());
-			preparedStatement.setLong(3, model.getCategoryId());
-
-			preparedStatement.executeUpdate();
-			resultSet = preparedStatement.getGeneratedKeys();
-			if (resultSet.next()) {
-				id = resultSet.getLong(1);
-			}
-			connection.commit();
-			return id;
-		} catch (SQLException e) {
-			if (connection != null) {
-				try {
-					connection.rollback();
-				} catch (SQLException e1) {
-					e1.printStackTrace();
-				}
-			}
-			return null;
-		} finally {
-			try {
-				if (connection != null) {
-					connection.close();
-				}
-				if (preparedStatement != null) {
-					preparedStatement.close();
-				}
-				if (resultSet != null) {
-					resultSet.close();
-				}
-
-			} catch (SQLException e) {
-				e.printStackTrace();
-
-				return null;
-			}
-		}
+		return insert(sql, model.getTitle(), model.getContent(), model.getCategoryId());
 	}
 
 	@Override
-	public NewModel saveNew(NewModel newModel) {
-		// TODO Auto-generated method stub
-		return null;
+	public NewModel findOne(Long id) {
+		String sql = "SELECT * FROM news WHERE id = ?";
+		List<NewModel> news = query(sql, new NewMapper(), id);
+
+		return news.isEmpty() ? null : news.get(0);
+	}
+
+	@Override
+	public void update(NewModel updateNew) {
+		StringBuffer sql = new StringBuffer();
+		sql.append("UPDATE news SET ");
+		sql.append("title = ?, thumbnail = ?, shortdescription= ?, content= ?, categoryid= ?");
+		sql.append(", createby= ?, createdate=?");
+		sql.append(" WHERE id = ?");
+		sql.append(";");
+		update(sql.toString(), updateNew.getTitle(), updateNew.getThmbnail(), updateNew.getShortDescription(),
+				updateNew.getContent(), updateNew.getCategoryId(), updateNew.getCreateBy(), updateNew.getCreateDate(),
+				updateNew.getId());
+	}
+
+	@Override
+	public void delete(Long id) {
+		String sql = "DELETE FROM news WHERE id = ?";
+
+		// Kiểm tra trong comment có newid đó không nếu có thì delete comment (foreign
+		// key newid) rồi mới xóa news
+		update(sql, id);
+
+	}
+
+	@Override
+	public List<NewModel> findAll(Integer offset, Integer limit) {
+		String sql = "SELECT * FROM news LIMIT ?,?";
+
+		return query(sql, new NewMapper(), offset, limit);
+	}
+
+	@Override
+	public int getTotalItem() {
+		String sql = "SELECT count(*) FROM news";
+		return count(sql);
 	}
 
 }

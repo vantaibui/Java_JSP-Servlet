@@ -7,6 +7,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,7 +55,7 @@ public class AbstractDAO<T> implements GenericDAO<T> {
 			while (resultSet.next()) {
 				results.add(rowMapper.mapRow(resultSet));
 			}
-			System.out.println(results);
+//			System.out.println(results);
 			return results;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -85,49 +87,19 @@ public class AbstractDAO<T> implements GenericDAO<T> {
 
 				if (parameter instanceof Long) {
 					preparedStatement.setLong(index, (long) parameter);
-
-				}
+				} else if (parameter instanceof Integer) {
+					preparedStatement.setInt(index, (int) parameter);
+				} else if (parameter instanceof String) {
+					preparedStatement.setString(index, (String) parameter);
+				} else if (parameter instanceof Timestamp) {
+					preparedStatement.setTimestamp(index, (Timestamp) parameter);
+				} else if (parameter == null) {
+					preparedStatement.setNull(index, Types.NULL);
+				} 
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}
-
-	}
-
-	@Override
-	public void update(String sql, Object... parameters) {
-		Connection connection = null;
-		PreparedStatement preparedStatement = null;
-
-		try {
-			connection = getConnection();
-			connection.setAutoCommit(false);
-			preparedStatement = connection.prepareStatement(sql);
-			setParameters(preparedStatement, parameters);
-
-			preparedStatement.executeUpdate();
-			connection.commit();
-		} catch (SQLException e) {
-			if (connection != null) {
-				try {
-					connection.rollback();
-				} catch (SQLException e2) {
-					e2.printStackTrace();
-				}
-			}
-		} finally {
-			try {
-				if (connection != null) {
-					connection.close();
-				}
-				if (preparedStatement != null) {
-					preparedStatement.close();
-				}
-
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
 		}
 
 	}
@@ -179,6 +151,83 @@ public class AbstractDAO<T> implements GenericDAO<T> {
 			}
 		}
 
+	}
+
+	@Override
+	public void update(String sql, Object... parameters) {
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		try {
+			connection = getConnection();
+			connection.setAutoCommit(false);
+			preparedStatement = connection.prepareStatement(sql);
+			setParameters(preparedStatement, parameters);
+
+			preparedStatement.executeUpdate();
+
+			connection.commit();
+		} catch (SQLException e) {
+			if (connection != null) {
+				try {
+					connection.rollback();
+				} catch (SQLException e2) {
+					e2.printStackTrace();
+				}
+			}
+		} finally {
+			try {
+				if (connection != null) {
+					connection.close();
+				}
+				if (preparedStatement != null) {
+					preparedStatement.close();
+				}
+
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+
+	}
+
+	@Override
+	public int count(String sql, Object... parameters) {
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+
+		try {
+			int count = 0;
+			connection = getConnection();
+			preparedStatement = connection.prepareStatement(sql);
+
+			// Set parameters
+			setParameters(preparedStatement, parameters);
+
+			resultSet = preparedStatement.executeQuery();
+			while (resultSet.next()) {
+				count = resultSet.getInt(1); // select count(*) from name
+			}
+			return count;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return 0;
+		} finally {
+			try {
+				if (connection != null) {
+					connection.close();
+				}
+				if (preparedStatement != null) {
+					preparedStatement.close();
+				}
+				if (resultSet != null) {
+					resultSet.close();
+				}
+
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 }

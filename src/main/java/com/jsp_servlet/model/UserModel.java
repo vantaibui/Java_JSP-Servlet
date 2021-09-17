@@ -1,8 +1,8 @@
 package com.jsp_servlet.model;
 
-public class UserModel extends AbstractModel { // Gọi là java bean (Java bean và java class khác nhau là java bean có
-												// getter và
-	// setter)
+public class UserModel extends AbstractModel<UserModel> {
+	// Gọi là java bean (Java bean và java class khác nhau là java bean có
+	// getter và setter)
 	private String userName;
 	private String fullName;
 	private String password;
