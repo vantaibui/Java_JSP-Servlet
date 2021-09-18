@@ -6,6 +6,7 @@ import java.util.List;
 import com.jsp_servlet.dao.INewDAO;
 import com.jsp_servlet.dao.implement.NewDAO;
 import com.jsp_servlet.model.NewModel;
+import com.jsp_servlet.paging.Pageble;
 import com.jsp_servlet.service.INewService;
 
 public class NewService implements INewService {
@@ -49,10 +50,16 @@ public class NewService implements INewService {
 		}
 	}
 
-	@Override
-	public List<NewModel> findAll(Integer offset, Integer limit) {
+	/*
+	 * @Override public List<NewModel> findAll(Integer offset, Integer limit, String
+	 * sortName, String sortBy) { return newDAO.findAll(offset, limit, sortName,
+	 * sortBy); }
+	 * 
+	 */
 
-		return newDAO.findAll(offset,limit);
+	@Override
+	public List<NewModel> findAll(Pageble pageble) {
+		return newDAO.findAll(pageble);
 	}
 
 	@Override

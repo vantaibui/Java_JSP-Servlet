@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.beanutils.BeanUtils;
 
 public class FormUitl {
-	@SuppressWarnings("deprecation")
+	@SuppressWarnings({ "deprecation", "unchecked" })
 	public static <T> T toModel(Class<T> clazz, HttpServletRequest request) {
 		T object = null;
 		try {

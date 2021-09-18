@@ -11,8 +11,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.jsp_servlet.constant.SystemConstant;
 import com.jsp_servlet.model.NewModel;
+import com.jsp_servlet.paging.PageRequest;
+import com.jsp_servlet.paging.Pageble;
 import com.jsp_servlet.service.INewService;
 import com.jsp_servlet.service.implement.NewService;
+import com.jsp_servlet.sort.Sorter;
+import com.jsp_servlet.utils.FormUitl;
 
 @WebServlet(urlPatterns = { "/admin-new" })
 public class NewController extends HttpServlet {
@@ -27,27 +31,20 @@ public class NewController extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		NewModel newModel = new NewModel();
+		NewModel newModel = FormUitl.toModel(NewModel.class, req);
 
-		String pageStr = req.getParameter("page");
-		String maxPageItemStr = req.getParameter("maxPageItem");
-		if (pageStr != null) {
-			newModel.setPage(Integer.parseInt(pageStr));
-		} else {
-			newModel.setPage(1);
-		}
-		if (maxPageItemStr != null) {
-			newModel.setMaxPageItem(Integer.parseInt(maxPageItemStr));
-		}
+//		Integer offset = (newModel.getPage() - 1) * newModel.getMaxPageItem();
 
-		Integer offset = (newModel.getPage() - 1) * newModel.getMaxPageItem();
-		 newModel.setListResult(newService.findAll(offset, newModel.getMaxPageItem()));
+		Pageble pageble = new PageRequest(newModel.getPage(), newModel.getMaxPageItem(),
+				new Sorter(newModel.getSortName(), newModel.getSortBy()));
+
+//		newModel.setListResult(
+//				newService.findAll(offset, newModel.getMaxPageItem(), newModel.getSortName(), newModel.getSortBy()));
+		
+		newModel.setListResult(newService.findAll(pageble));
+		
 		newModel.setTotalItem(newService.getTotalItem());
-		
-		// newModel.setTotalItem(newService().findAll().size())
-		// newModel.setTotalItem(newModel.getListResult().size())
-		
-		newModel.setTotalPage((int) Math.ceil((double)newModel.getTotalItem() / newModel.getMaxPageItem()));
+		newModel.setTotalPage((int) Math.ceil((double) newModel.getTotalItem() / newModel.getMaxPageItem()));
 		req.setAttribute(SystemConstant.MODEL, newModel);
 
 		RequestDispatcher requestDispatcher = req.getRequestDispatcher("/views/admin/new/list.jsp");

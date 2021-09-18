@@ -5,6 +5,7 @@ import java.util.List;
 import com.jsp_servlet.dao.INewDAO;
 import com.jsp_servlet.mapper.implement.NewMapper;
 import com.jsp_servlet.model.NewModel;
+import com.jsp_servlet.paging.Pageble;
 
 public class NewDAO extends AbstractDAO<NewModel> implements INewDAO {
 
@@ -55,11 +56,28 @@ public class NewDAO extends AbstractDAO<NewModel> implements INewDAO {
 
 	}
 
-	@Override
-	public List<NewModel> findAll(Integer offset, Integer limit) {
-		String sql = "SELECT * FROM news LIMIT ?,?";
+	/*
+	 * @Override public List<NewModel> findAll(Integer offset, Integer limit, String
+	 * sortName, String sortBy) { StringBuilder sql = new StringBuilder();
+	 * sql.append("SELECT * FROM news"); if (sortName != null && sortBy != null) {
+	 * sql.append(" ORDER BY" + " " + sortName + " " + sortBy + " "); } if (offset
+	 * != null && limit != null) { sql.append("LIMIT" + " " + offset + "," + limit);
+	 * } return query(sql.toString(), new NewMapper()); }
+	 */
 
-		return query(sql, new NewMapper(), offset, limit);
+	@Override
+	public List<NewModel> findAll(Pageble pageble) {
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT * FROM news");
+		if (pageble.getSorter().getSortName() != null && pageble.getSorter().getSortBy() != null) {
+			sql.append(" ORDER BY" + " " + pageble.getSorter().getSortName() + " " + pageble.getSorter().getSortBy()
+					+ " ");
+		}
+		if (pageble.getOffset() != null && pageble.getLimit() != null) {
+			sql.append("LIMIT" + " " + pageble.getOffset() + "," + pageble.getLimit());
+		}
+		System.out.println(sql.toString());
+		return query(sql.toString(), new NewMapper());
 	}
 
 	@Override

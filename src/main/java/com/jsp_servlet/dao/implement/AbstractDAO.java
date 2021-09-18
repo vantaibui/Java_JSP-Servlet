@@ -11,6 +11,7 @@ import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import com.jsp_servlet.dao.GenericDAO;
 import com.jsp_servlet.mapper.RowMapper;
@@ -18,12 +19,14 @@ import com.jsp_servlet.mapper.RowMapper;
 public class AbstractDAO<T> implements GenericDAO<T> {
 
 	public static Connection getConnection() {
-		String jdbcDriver = "com.mysql.cj.jdbc.Driver";
-		String hostName = "jdbc:mysql://localhost:3306/";
-		String dbName = "project-jsp_servlet";
+		ResourceBundle resourceBundle = ResourceBundle.getBundle("db");
+		
+		String jdbcDriver = resourceBundle.getString("jdbcDriver");
+		String hostName = resourceBundle.getString("hostName");
+		String dbName = resourceBundle.getString("dbName");
 		String connectionURL = hostName + dbName;
-		String username = "root";
-		String password = "root";
+		String username = resourceBundle.getString("username");
+		String password = resourceBundle.getString("password");
 
 		try {
 			Class.forName(jdbcDriver);
@@ -50,12 +53,12 @@ public class AbstractDAO<T> implements GenericDAO<T> {
 
 			// Set parameters
 			setParameters(preparedStatement, parameters);
-
+			
 			resultSet = preparedStatement.executeQuery();
 			while (resultSet.next()) {
 				results.add(rowMapper.mapRow(resultSet));
 			}
-//			System.out.println(results);
+//			System.out.println("Results: " + results);
 			return results;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -95,7 +98,7 @@ public class AbstractDAO<T> implements GenericDAO<T> {
 					preparedStatement.setTimestamp(index, (Timestamp) parameter);
 				} else if (parameter == null) {
 					preparedStatement.setNull(index, Types.NULL);
-				} 
+				}
 			}
 
 		} catch (SQLException e) {
