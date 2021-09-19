@@ -55,6 +55,7 @@ public class NewController extends HttpServlet {
 //			requestDispatcher.forward(req, resp);
 		} else if (newModel.getType().equals(SystemConstant.EDIT)) {
 			if (newModel.getId() != null) {
+				
 				newModel = newService.findOne(newModel.getId());
 			}else {
 				

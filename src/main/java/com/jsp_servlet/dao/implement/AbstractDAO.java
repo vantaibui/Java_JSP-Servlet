@@ -20,7 +20,7 @@ public class AbstractDAO<T> implements GenericDAO<T> {
 
 	public static Connection getConnection() {
 		ResourceBundle resourceBundle = ResourceBundle.getBundle("db");
-		
+
 		String jdbcDriver = resourceBundle.getString("jdbcDriver");
 		String hostName = resourceBundle.getString("hostName");
 		String dbName = resourceBundle.getString("dbName");
@@ -53,7 +53,7 @@ public class AbstractDAO<T> implements GenericDAO<T> {
 
 			// Set parameters
 			setParameters(preparedStatement, parameters);
-			
+
 			resultSet = preparedStatement.executeQuery();
 			while (resultSet.next()) {
 				results.add(rowMapper.mapRow(resultSet));
@@ -120,6 +120,7 @@ public class AbstractDAO<T> implements GenericDAO<T> {
 			preparedStatement = connection.prepareStatement(sql, RETURN_GENERATED_KEYS);
 			setParameters(preparedStatement, parameters);
 
+			System.out.println("DAO" + sql);
 			preparedStatement.executeUpdate();
 			resultSet = preparedStatement.getGeneratedKeys();
 			if (resultSet.next()) {
@@ -167,7 +168,7 @@ public class AbstractDAO<T> implements GenericDAO<T> {
 			setParameters(preparedStatement, parameters);
 
 			preparedStatement.executeUpdate();
-
+			System.out.println(sql);
 			connection.commit();
 		} catch (SQLException e) {
 			if (connection != null) {

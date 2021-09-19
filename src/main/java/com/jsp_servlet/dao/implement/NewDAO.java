@@ -20,9 +20,10 @@ public class NewDAO extends AbstractDAO<NewModel> implements INewDAO {
 
 	@Override
 	public Long save(NewModel model) {
-		String sql = "INSERT INTO news (title, content, categoryid) VALUES (?, ?, ?)";
+		String sql = "INSERT INTO news (title, thumbnail, shortdescription, content, categoryid) VALUES (?, ?, ?, ?, ?)";
 
-		return insert(sql, model.getTitle(), model.getContent(), model.getCategoryId());
+		return insert(sql, model.getTitle(), model.getThmbnail(), model.getShortDescription(), model.getContent(),
+				model.getCategoryId());
 	}
 
 	@Override
@@ -37,13 +38,13 @@ public class NewDAO extends AbstractDAO<NewModel> implements INewDAO {
 	public void update(NewModel updateNew) {
 		StringBuffer sql = new StringBuffer();
 		sql.append("UPDATE news SET ");
-		sql.append("title = ?, thumbnail = ?, shortdescription= ?, content= ?, categoryid= ?");
-		sql.append(", createby= ?, createdate=?");
+		sql.append("title = ?, thumbnail = ?, shortdescription= ?, content= ?");
+//		sql.append(", createby= ?, createdate=?");
 		sql.append(" WHERE id = ?");
 		sql.append(";");
+		System.out.println("SQL" + sql);
 		update(sql.toString(), updateNew.getTitle(), updateNew.getThmbnail(), updateNew.getShortDescription(),
-				updateNew.getContent(), updateNew.getCategoryId(), updateNew.getCreateBy(), updateNew.getCreateDate(),
-				updateNew.getId());
+				updateNew.getContent(), updateNew.getId());
 	}
 
 	@Override

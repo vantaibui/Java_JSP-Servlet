@@ -30,8 +30,13 @@ public class NewService implements INewService {
 
 	@Override
 	public NewModel save(NewModel newModel) {
+		
+		CategoryModel categoryModel = categoryDAO.findOndeByCode(newModel.getCategoryCode());
+		System.out.println(categoryModel);
+		newModel.setCategoryId(categoryModel.getId());
 		newModel.setCreateDate(new Timestamp(System.currentTimeMillis()));
 		Long newId = newDAO.save(newModel);
+		System.out.println("New model" + newModel);
 		System.out.println(newId);
 		return newDAO.findOne(newId);
 	}
@@ -39,13 +44,18 @@ public class NewService implements INewService {
 	@Override
 	public NewModel update(NewModel updateNew) {
 		NewModel oldNew = newDAO.findOne(updateNew.getId());
+		
 		updateNew.setCreateBy(oldNew.getCreateBy());
 		updateNew.setCreateDate(oldNew.getCreateDate());
 		updateNew.setModifiedBy("");
 		updateNew.setModifiedDate(new Timestamp(System.currentTimeMillis()));
+		
+		System.out.println(updateNew.toString());
 
+//		CategoryModel categoryModel = categoryDAO.findOndeByCode(updateNew.getCategoryCode());
+//		updateNew.setCategoryId(categoryModel.getId());
+		
 		newDAO.update(updateNew);
-
 		return newDAO.findOne(updateNew.getId());
 	}
 
@@ -79,7 +89,7 @@ public class NewService implements INewService {
 		CategoryModel categoryModel = categoryDAO.findOne(newModel.getCategoryId());
 		newModel.setCategoryCode(categoryModel.getCode());
 
-		return newModel;
+		return newModel ;
 	}
 
 }

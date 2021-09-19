@@ -16,6 +16,8 @@ public class NewModel extends AbstractModel<NewModel> {
 		this.title = title;
 	}
 
+
+
 	public String getThmbnail() {
 		return thmbnail;
 	}
@@ -59,6 +61,9 @@ public class NewModel extends AbstractModel<NewModel> {
 	@Override
 	public String toString() {
 		return "NewModel [title=" + title + ", thmbnail=" + thmbnail + ", shortDescription=" + shortDescription
-				+ ", content=" + content + ", categoryId=" + categoryId + "]";
+				+ ", content=" + content + ", categoryId=" + categoryId + ", categoryCode=" + categoryCode + "]";
 	}
+
+
+	
 }

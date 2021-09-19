@@ -10,9 +10,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jsp_servlet.model.NewModel;
+import com.jsp_servlet.model.UserModel;
 import com.jsp_servlet.service.INewService;
 import com.jsp_servlet.service.implement.NewService;
 import com.jsp_servlet.utils.HttpUtils;
+import com.jsp_servlet.utils.SessionUtil;
 
 @WebServlet(urlPatterns = { "/api-admin-new" })
 public class NewAPI extends HttpServlet {
@@ -29,12 +31,13 @@ public class NewAPI extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		req.setCharacterEncoding("UTF-8");
 		resp.setContentType("application/json");
+		ObjectMapper objectMapper = new ObjectMapper();
 
 		NewModel newModel = HttpUtils.of(req.getReader()).toModel(NewModel.class);
-		newModel = newService.save(newModel);
-		System.out.println(newModel);
 
-		ObjectMapper objectMapper = new ObjectMapper();
+//		newModel.setCreateBy(((UserModel) SessionUtil.getInstance().getValue(req, "USERMODEL")).getUserName());
+		newModel = newService.save(newModel);
+
 		objectMapper.writeValue(resp.getOutputStream(), newModel);
 	}
 
@@ -45,6 +48,8 @@ public class NewAPI extends HttpServlet {
 		ObjectMapper objectMapper = new ObjectMapper();
 
 		NewModel updateNew = HttpUtils.of(req.getReader()).toModel(NewModel.class);
+		UserModel userModel = (UserModel) SessionUtil.getInstance().getValue(req, "USERMODEL");
+		updateNew.setModifiedBy(userModel.getUserName());
 		updateNew = newService.update(updateNew);
 		objectMapper.writeValue(resp.getOutputStream(), updateNew);
 	}

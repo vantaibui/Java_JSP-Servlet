@@ -1,11 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@include file="/common/taglib.jsp"%>
+<c:url var="APIurl" value="/api-admin-new" />
+<c:url var="NEWurl" value="/admin-new" />
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>Danh sách bài viết</title>
+
 </head>
 <body>
 
@@ -49,6 +52,7 @@
 										<table class="table table-bordered">
 											<thead>
 												<tr>
+													<th><input type="checkbox" id="checkAll"></th>
 													<th>Tên bài viết</th>
 													<th>Mô tả ngắn</th>
 												</tr>
@@ -56,6 +60,8 @@
 											<tbody>
 												<c:forEach var="item" items="${model.listResult }">
 													<tr>
+														<td><input type="checkbox" id="checkbox_${item.id}"
+															value="${item.id}"></td>
 														<td><c:out value="${item.title }"></c:out></td>
 														<td>${item.content}</td>
 														<td><c:url var="editURL" value="/admin-new">
@@ -64,7 +70,8 @@
 															</c:url> <a class="btn btn-sm btn-primary btn-edit"
 															data-toggle="tooltip" title="Cập nhật bài viết"
 															href=${editURL}><i class="fa fa-pencil-square-o"
-																aria-hidden="true"></i> </a></td>
+																aria-hidden="true"></i> </a>
+																
 													</tr>
 												</c:forEach>
 											</tbody>
@@ -101,7 +108,7 @@
 						$('#maxPageItem').val(limit);
 						$('#page').val(page);
 						$('#sortName').val('title');
-						$('#sortBy').val('desc');
+						$('#sortBy').val('asc');
 						$('#type').val('list');
 						$('#formSubmit').submit();
 
@@ -109,6 +116,31 @@
 				}
 			})
 		});
+		
+		$('#btnDelete').click(function(){
+			var data = {};
+			var ids = $('tbody input[type=checkbox]:checked').map(function () {
+				return $(this).val();
+			}).get();
+			data['ids'] = ids;
+			deleteNew(data);
+		})
+		
+		function deleteNew(data) {
+		$.ajax({
+			url : '${APIurl}',
+			type : 'DELETE',
+			contentType : 'application/json',
+			data : JSON.stringify(data),
+			success : function(result) {
+				window.location.href = "${NEWurl}?type=list&page=1&maxPageItem=2";
+			},
+			error : function(error) {
+				console.log(error);
+			}
+		})
+	};
+		
 	</script>
 </body>
 </html>

@@ -23,4 +23,12 @@ public class CategoryDAO extends AbstractDAO<CategoryModel> implements ICategory
 		return categories.isEmpty() ? null : categories.get(0);
 	}
 
+	@Override
+	public CategoryModel findOndeByCode(String code) {
+		String sql = "SELECT * FROM category WHERE code = ?";
+		List<CategoryModel> categories = query(sql, new CategoryMapper(), code);
+
+		return categories.isEmpty() ? null : categories.get(0);
+	}
+
 }
