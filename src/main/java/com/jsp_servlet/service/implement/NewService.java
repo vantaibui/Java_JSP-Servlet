@@ -3,8 +3,11 @@ package com.jsp_servlet.service.implement;
 import java.sql.Timestamp;
 import java.util.List;
 
+import com.jsp_servlet.dao.ICategoryDAO;
 import com.jsp_servlet.dao.INewDAO;
+import com.jsp_servlet.dao.implement.CategoryDAO;
 import com.jsp_servlet.dao.implement.NewDAO;
+import com.jsp_servlet.model.CategoryModel;
 import com.jsp_servlet.model.NewModel;
 import com.jsp_servlet.paging.Pageble;
 import com.jsp_servlet.service.INewService;
@@ -13,8 +16,11 @@ public class NewService implements INewService {
 
 	private INewDAO newDAO;
 
+	private ICategoryDAO categoryDAO;
+
 	public NewService() {
 		newDAO = new NewDAO();
+		categoryDAO = new CategoryDAO();
 	}
 
 	@Override
@@ -65,6 +71,15 @@ public class NewService implements INewService {
 	@Override
 	public int getTotalItem() {
 		return newDAO.getTotalItem();
+	}
+
+	@Override
+	public NewModel findOne(Long id) {
+		NewModel newModel = newDAO.findOne(id);
+		CategoryModel categoryModel = categoryDAO.findOne(newModel.getCategoryId());
+		newModel.setCategoryCode(categoryModel.getCode());
+
+		return newModel;
 	}
 
 }

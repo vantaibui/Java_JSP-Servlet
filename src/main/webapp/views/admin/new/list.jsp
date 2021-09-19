@@ -58,6 +58,13 @@
 													<tr>
 														<td><c:out value="${item.title }"></c:out></td>
 														<td>${item.content}</td>
+														<td><c:url var="editURL" value="/admin-new">
+																<c:param name="type" value="edit" />
+																<c:param name="id" value="${item.id }" />
+															</c:url> <a class="btn btn-sm btn-primary btn-edit"
+															data-toggle="tooltip" title="Cập nhật bài viết"
+															href=${editURL}><i class="fa fa-pencil-square-o"
+																aria-hidden="true"></i> </a></td>
 													</tr>
 												</c:forEach>
 											</tbody>
@@ -68,6 +75,7 @@
 
 										<input type="hidden" value="" id="sortName" name="sortName">
 										<input type="hidden" value="" id="sortBy" name="sortBy">
+										<input type="hidden" value="" id="type" name="type">
 									</div>
 								</div>
 							</div>
@@ -79,14 +87,8 @@
 	</div>
 
 	<script type="text/javascript">
-		var totalPages = $
-		{
-			model.totalPage
-		};
-		var currentPage = $
-		{
-			model.page
-		};
+		var totalPages = ${model.totalPage};
+		var currentPage = ${model.page};
 		var limit = 2;
 		$(function() {
 			window.pagObj = $('#pagination').twbsPagination({
@@ -100,6 +102,7 @@
 						$('#page').val(page);
 						$('#sortName').val('title');
 						$('#sortBy').val('desc');
+						$('#type').val('list');
 						$('#formSubmit').submit();
 
 					}
